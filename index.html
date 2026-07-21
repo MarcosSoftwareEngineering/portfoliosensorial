@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marcos Vinicius Souza Silva | Engenheiro de Software</title>
+
+<!-- OPEN GRAPH / COMPARTILHAMENTO (WhatsApp, LinkedIn, etc) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://marcossoftwareengineering.github.io/NOME_DO_REPOSITORIO/">
+<meta property="og:title" content="Marcos Vinicius Souza Silva | Engenheiro de Software">
+<meta property="og:description" content="Site portfólio desenvolvido por Marcos Vinicius focado em experiências sensoriais e UX com tema mágico e sons nostálgicos.">
+<!-- IMPORTANTE: Coloque o link absoluto da sua imagem no GitHub Pages aqui -->
+<meta property="og:image" content="https://marcossoftwareengineering.github.io/NOME_DO_REPOSITORIO/src/img/Minha_Logo.jpeg">
+
+<meta name="description" content="Site portfólio desenvolvido por Marcos Vinicius focado em experiências sensoriais e UX com tema mágico e sons nostálgicos.">
+
+<!-- Ícone da aba do navegador -->
+<link rel="icon" type="image/jpeg" href="./src/img/Minha_Logo.jpeg">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ---------- Sistema de Temas Dinâmico ---------- */
+  :root{
+    --bg: #FFFFFF;
+    --bg-soft: #FAF7F1;
+    --surface: #F6F1E6;
+    --surface-hi: #EFE7D3;
+    --line: #E4D9C4;
+    --text: #20242C;
+    --text-dim: #6B7280;
+    --navy: #181D27;
+    --sky: #4F46E5;
+    --emerald: #D97706;
+    --mystic-pulse: 0.5;
+  }
+  html[data-theme="blueprint"]{
+    --bg: #0F2942;
+    --bg-soft: #0B2135;
+    --surface: #153453;
+    --surface-hi: #1B3F63;
+    --line: #25507A;
+    --text: #DCEAF7;
+    --text-dim: #9FB8D1;
+    --navy: #F3F8FF;
+    --sky: #38BDF8;
+    --emerald: #FBBF24;
+  }
+  html[data-theme="terminal"]{
+    --bg: #0B0F17;
+    --bg-soft: #10141D;
+    --surface: #141924;
+    --surface-hi: #1B212F;
+    --line: #252C3B;
+    --text: #E5E9F0;
+    --text-dim: #8B94A7;
+    --navy: #F5F7FA;
+    --sky: #10B981;
+    --emerald: #22D3EE;
+  }
+  html[data-theme="graphite"]{
+    --bg: #1C1C1E;
+    --bg-soft: #161618;
+    --surface: #242426;
+    --surface-hi: #2B2B2E;
+    --line: #3A3A3D;
+    --text: #F2F2F2;
+    --text-dim: #A8A8AC;
+    --navy: #FFFFFF;
+    --sky: #A3E635;
+    --emerald: #8B5CF6;
+  }
+  
+  html{transition: background-color .35s ease;}
+  body{transition: background-color .35s ease, color .35s ease;}
+  html.mystic-mode, html.mystic-mode body{transition:none;}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .font-display{font-family:'Space Grotesk',sans-serif}
+  .font-mono{font-family:'JetBrains Mono',monospace}
+
+  /* ---------- Entrada Direta (Splash & Start) ---------- */
+  #start-overlay {
+    position: fixed; inset: 0; z-index: 99999;
+    background: #0B0F17; 
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.6s ease;
+  }
+  #start-overlay.fade-out {
+    opacity: 0; pointer-events: none;
+  }
+  
+  .btn-mystic-start {
+    background: conic-gradient(from 0deg, #C084FC, #F472B6, #FBBF24, #2DD4BF, #38BDF8, #C084FC);
+    color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.1rem;
+    padding: 16px 36px; border-radius: 999px;
+    box-shadow: 0 0 40px -10px rgba(139,92,246, 0.8);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer; position: relative; z-index: 1;
+    animation: mystic-spin 6s linear infinite, pop .7s cubic-bezier(.34,1.56,.64,1) both;
+  }
+  .btn-mystic-start:hover {
+    transform: scale(1.05); box-shadow: 0 0 60px -10px rgba(139,92,246, 1);
+  }
+  .btn-mystic-start-inner {
+    position: absolute; inset: 2px; border-radius: 999px;
+    background: #0B0F17; z-index: -1;
+  }
+  .btn-mystic-start-text {
+    position: relative; z-index: 2; letter-spacing: 0.05em;
+  }
+
+  #splash{
+    position:fixed; inset:0; z-index:9999;
+    background: #0B0F17;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    transition: opacity .8s ease, visibility .8s ease;
+  }
+  #splash.fade-out{
+    opacity:0; visibility:hidden; pointer-events:none;
+  }
+
+  #splash-canvas{position:fixed; inset:0; z-index:10000; pointer-events:none;}
+  @keyframes pop{
+    0%{transform:scale(.4); opacity:0}
+    100%{transform:scale(1); opacity:1}
+  }
+
+  /* ---------- Grid & Glow ---------- */
+  .grid-bg{
+    position:absolute; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      linear-gradient(color-mix(in srgb, var(--sky) 8%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--sky) 8%, transparent) 1px, transparent 1px);
+    background-size: 42px 42px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 40%, transparent 100%);
+            mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black 40%, transparent 100%);
+    transition: background-image .35s ease;
+  }
+  .glow{
+    background: radial-gradient(600px circle at 20% 10%, color-mix(in srgb, var(--sky) 14%, transparent), transparent 40%),
+                radial-gradient(500px circle at 85% 5%, color-mix(in srgb, var(--emerald) 12%, transparent), transparent 40%);
+    transition: background .35s ease;
+  }
+
+  /* ---------- UI Elements ---------- */
+  .glass{
+    background: color-mix(in srgb, var(--bg) 80%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+    transition: background .35s ease, border-color .35s ease;
+  }
+
+  .nav-link{position:relative; color:var(--text-dim); transition: color .25s ease;}
+  .nav-link::after{
+    content:''; position:absolute; left:0; bottom:-4px; width:0; height:1px;
+    background: var(--sky); transition: width .25s ease;
+  }
+  .nav-link:hover{color:var(--navy)}
+  .nav-link:hover::after{width:100%}
+
+  .terminal{
+    background: linear-gradient(180deg, #16202E 0%, #0E1520 100%);
+    border:1px solid #263142;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4), 0 0 90px -28px color-mix(in srgb, var(--sky) 35%, transparent);
+  }
+  html.mystic-mode .terminal{
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.4),
+      0 0 calc(60px + var(--mystic-pulse, 0.5) * 60px) calc(-10px)
+      color-mix(in srgb, var(--sky) calc(30% + var(--mystic-pulse, 0.5) * 20%), transparent);
+  }
+  .dot{width:11px;height:11px;border-radius:50%}
+  .cursor{
+    display:inline-block; width:8px; height:1.1em; background:var(--sky);
+    vertical-align:text-bottom; animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0}}
+
+  .reveal{opacity:0; transform:translateY(28px); transition: opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+  .hero-in{animation: hero-rise .8s ease both;}
+  @keyframes hero-rise{
+    from{opacity:0; transform:translateY(16px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .badge{
+    border:1px solid var(--line); background: color-mix(in srgb, var(--surface) 90%, var(--sky) 10%);
+    color:var(--navy);
+    transition: border-color .25s ease, transform .25s ease, background .25s ease;
+  }
+  .badge:hover{border-color: var(--sky); transform:translateY(-2px); background: color-mix(in srgb, var(--surface-hi) 85%, var(--sky) 15%);}
+
+  .card{
+    background: var(--surface); border: 1px solid var(--line);
+    transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease, background .35s ease;
+  }
+  .card:hover{
+    transform: translateY(-6px);
+    border-color: color-mix(in srgb, var(--sky) 40%, transparent);
+    box-shadow: 0 20px 40px -22px rgba(0,0,0,0.15), 0 0 46px -16px color-mix(in srgb, var(--sky) 20%, transparent);
+  }
+  .card-img-wrap{overflow:hidden}
+  .card-img-wrap img{transition: transform .6s ease, filter .6s ease;}
+  .card:hover .card-img-wrap img{transform:scale(1.06); filter:brightness(0.92);}
+
+  .tag{
+    font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.02em;
+    color:var(--sky); background: color-mix(in srgb, var(--sky) 10%, transparent);
+    border:1px solid color-mix(in srgb, var(--sky) 25%, transparent);
+  }
+
+  .btn-primary{
+    background: linear-gradient(135deg, var(--sky), var(--emerald));
+    color:#fff; font-weight:600;
+    box-shadow: 0 10px 25px -8px color-mix(in srgb, var(--sky) 45%, transparent);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow: 0 14px 30px -8px color-mix(in srgb, var(--sky) 60%, transparent);}
+
+  .btn-ghost{
+    border:1px solid var(--line); color:var(--navy); background: var(--bg);
+    transition: border-color .2s ease, background .2s ease, transform .2s ease;
+  }
+  .btn-ghost:hover{border-color:var(--emerald); background: color-mix(in srgb, var(--emerald) 8%, transparent); transform:translateY(-2px);}
+
+  .field{
+    background:var(--surface); border:1px solid var(--line); color:var(--navy);
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .field::placeholder{color:var(--text-dim);}
+  .field:focus{
+    outline:none; border-color:var(--sky);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--sky) 16%, transparent);
+  }
+
+  .social-icon{
+    border:1px solid var(--line); background:var(--surface); color:var(--navy);
+    transition: border-color .2s ease, transform .2s ease, color .2s ease;
+  }
+  .social-icon:hover{border-color:var(--sky); color:var(--sky); transform:translateY(-3px);}
+
+  ::selection{background:var(--sky); color:#fff;}
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline:2px solid var(--sky); outline-offset:3px; border-radius:4px;
+  }
+
+  /* ---------- Ocultação Inteligente (Idle Timeout) ---------- */
+  .idle-hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(15px) !important;
+  }
+
+  /* ---------- Theme Switcher ---------- */
+  #theme-switcher{
+    position:fixed; right:20px; bottom:20px; z-index:60;
+    display:flex; align-items:center; gap:8px;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    border:1px solid var(--line); border-radius:999px;
+    padding:8px; box-shadow: 0 12px 28px -12px rgba(0,0,0,0.25);
+    backdrop-filter: blur(10px);
+    transition: opacity 0.6s ease, transform 0.6s ease, background 0.35s ease;
+  }
+  .theme-dot{
+    width:26px; height:26px; border-radius:50%; border:2px solid transparent; cursor:pointer;
+    transition: transform .2s ease, border-color .2s ease; padding:0;
+  }
+  .theme-dot:hover{transform:translateY(-2px) scale(1.06);}
+  .theme-dot.active{border-color: var(--sky);}
+  .theme-label{
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-dim);
+    padding-left:2px; padding-right:2px; white-space:nowrap;
+  }
+
+  .theme-dot-mystic{
+    background: conic-gradient(from 0deg, #C084FC, #F472B6, #FBBF24, #2DD4BF, #38BDF8, #C084FC);
+    position:relative;
+  }
+  @keyframes mystic-spin{ to{ transform: rotate(360deg); } }
+  @keyframes mystic-ring{
+    0%,100%{ box-shadow: 0 0 0 0 color-mix(in srgb, var(--sky) 55%, transparent); }
+    50%{ box-shadow: 0 0 0 6px color-mix(in srgb, var(--sky) 0%, transparent); }
+  }
+  .theme-dot-mystic.active{
+    animation: mystic-ring 2.4s ease-in-out infinite; border-color: var(--sky);
+  }
+  .theme-dot-mystic::after{
+    content:''; position:absolute; inset:-3px; border-radius:50%;
+    background: inherit; filter: blur(2px); opacity:.6; z-index:-1;
+    animation: mystic-spin 6s linear infinite;
+  }
+  
+  @media (max-width: 640px){
+    #theme-switcher{ right:12px; bottom:12px; padding:6px; gap:6px;}
+    .theme-label{display:none;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .reveal, .hero-in, #splash, html, body{transition:none !important; animation:none !important; opacity:1; transform:none;}
+    .cursor, .theme-dot-mystic.active, .theme-dot-mystic::after, .btn-mystic-start{animation:none !important;}
+  }
+
+  /* ---------- Painel Flutuante de Áudio (Glassmorphism) ---------- */
+  #audio-panel{
+    position:fixed; left:20px; bottom:20px; z-index:60;
+    display:flex; align-items:center; gap:10px;
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+    border:1px solid color-mix(in srgb, var(--line) 80%, transparent);
+    border-radius:999px;
+    padding:8px 16px 8px 8px;
+    box-shadow: 0 12px 32px -12px rgba(0,0,0,0.35);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    color: var(--navy);
+    transition: opacity 0.6s ease, transform 0.6s ease, background .35s ease, border-color .35s ease;
+  }
+  #audio-toggle-btn{
+    width:34px; height:34px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(135deg, var(--sky), var(--emerald));
+    color:#fff; border:none; cursor:pointer;
+    box-shadow: 0 6px 16px -6px color-mix(in srgb, var(--sky) 55%, transparent);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  #audio-toggle-btn:hover{ transform:scale(1.07); }
+  #audio-toggle-btn:active{ transform:scale(0.96); }
+  #audio-volume-slider{
+    -webkit-appearance:none; appearance:none;
+    width:90px; height:4px; border-radius:999px;
+    background: color-mix(in srgb, var(--text-dim) 35%, transparent);
+    cursor:pointer; outline:none;
+  }
+  #audio-volume-slider::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none;
+    width:14px; height:14px; border-radius:50%;
+    background: var(--sky); border:2px solid var(--bg);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--sky) 60%, transparent);
+    cursor:pointer;
+  }
+  #audio-volume-slider::-moz-range-thumb{
+    width:14px; height:14px; border-radius:50%;
+    background: var(--sky); border:2px solid var(--bg);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--sky) 60%, transparent);
+    cursor:pointer;
+  }
+  @media (max-width:640px){
+    #audio-panel{ left:12px; bottom:12px; padding:6px 12px 6px 6px; gap:8px; }
+    #audio-volume-slider{ width:64px; }
+  }
+</style>
+</head>
+
+<body class="antialiased relative">
+
+<!-- ENGINE DE ÁUDIO EMBUTIDA (Com Fallback da Nuvem) -->
+<audio id="theme-audio" preload="auto">
+  <source src="./udio.01.ogg/PS1%20Startup%20-%20QuickSounds.com.mp3" type="audio/mpeg">
+  <source src="https://www.myinstants.com/media/sounds/playstation-1-bios-sound.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ÁUDIO DE FEEDBACK DE CLIQUE (Som de Volume do Windows) -->
+<audio id="click-audio" preload="auto">
+  <source src="./udio.01.ogg/WindowsBackground.wav" type="audio/wav">
+</audio>
+
+<!-- TELA DE START (O Click Obrigatório que destrava o site) -->
+<div id="start-overlay">
+  <p class="font-mono text-xs tracking-widest text-[#38BDF8] uppercase mb-5">// marcos_software_engineer</p>
+  <button id="btn-start" class="btn-mystic-start">
+    <span class="btn-mystic-start-inner"></span>
+    <span class="btn-mystic-start-text">Acessar Portfólio</span>
+  </button>
+</div>
+
+<!-- SPLASH SCREEN -->
+<div id="splash"></div>
+<canvas id="splash-canvas"></canvas>
+
+<!-- NAVBAR -->
+<header id="navbar" class="fixed top-0 left-0 right-0 z-50 glass transition-all duration-300">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="#inicio" class="flex items-center gap-3 group">
+      <img src="./src/img/Minha_Logo.jpeg" alt="Logo M.S.E." class="h-11 w-auto max-w-[160px] object-contain rounded-md" onerror="this.style.display='none'">
+      <span class="sr-only">M.S.E.</span>
+    </a>
+    
+    <!-- Menu Desktop -->
+    <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+      <a href="#inicio" class="nav-link">Início</a>
+      <a href="#sobre" class="nav-link">Sobre</a>
+      <a href="#projetos" class="nav-link">Projetos</a>
+      <a href="#contato" class="nav-link">Contato</a>
+    </nav>
+    <a href="https://wa.me/5571987772415" target="_blank" rel="noopener" class="hidden md:inline-flex btn-primary text-sm px-5 py-2.5 rounded-full">
+      Falar no WhatsApp
+    </a>
+
+    <!-- Botão Menu Hambúrguer (Mobile) -->
+    <button id="mobile-menu-btn" class="md:hidden flex items-center justify-center p-2 text-[color:var(--navy)] focus:outline-none" aria-label="Abrir menu">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Menu Mobile (Dropdown) -->
+  <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full glass border-t flex flex-col px-6 py-6 gap-6 shadow-2xl transition-all duration-300" style="border-color:var(--line); background:var(--bg);">
+    <a href="#inicio" class="mobile-nav-link text-[color:var(--navy)] font-medium text-lg border-b pb-2" style="border-color:var(--line);">Início</a>
+    <a href="#sobre" class="mobile-nav-link text-[color:var(--navy)] font-medium text-lg border-b pb-2" style="border-color:var(--line);">Sobre</a>
+    <a href="#projetos" class="mobile-nav-link text-[color:var(--navy)] font-medium text-lg border-b pb-2" style="border-color:var(--line);">Projetos</a>
+    <a href="#contato" class="mobile-nav-link text-[color:var(--navy)] font-medium text-lg border-b pb-2" style="border-color:var(--line);">Contato</a>
+    <a href="https://wa.me/5571987772415" target="_blank" rel="noopener" class="btn-primary text-center py-3.5 rounded-full mt-2 font-medium">Falar no WhatsApp</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section id="inicio" class="relative pt-40 pb-28 glow overflow-hidden">
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="relative z-10 max-w-6xl mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
+    <div class="hero-in">
+      <span class="font-mono text-xs tracking-widest text-[color:var(--sky)] uppercase">// engenharia_de_software</span>
+      <h1 class="font-display text-4xl sm:text-5xl lg:text-[3.4rem] leading-[1.08] font-bold mt-4 mb-6 text-[color:var(--navy)]">
+        Software que <span class="text-[color:var(--sky)]">escala</span>,<br>
+        arquitetura que <span class="text-[color:var(--emerald)]">dura</span>.
+      </h1>
+      <p class="text-[color:var(--text-dim)] text-base sm:text-lg mb-2 leading-relaxed">
+        Marcos Vinicius Souza Silva — Engenheiro de Software
+      </p>
+      <p class="text-[color:var(--text-dim)] text-sm sm:text-base mb-10 leading-relaxed font-mono">
+        Full-Stack Web Developer · M.S.E.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a href="#projetos" class="btn-primary px-7 py-3.5 rounded-full text-sm">Ver Projetos</a>
+        <a href="https://wa.me/5571987772415" target="_blank" rel="noopener" class="btn-ghost px-7 py-3.5 rounded-full text-sm">Falar no WhatsApp</a>
+      </div>
+    </div>
+
+    <div class="hero-in" style="animation-delay:.12s">
+      <div class="terminal rounded-xl overflow-hidden">
+        <div class="flex items-center gap-2 px-4 py-3 border-b" style="border-color:#263142">
+          <span class="dot" style="background:#FF5F57"></span>
+          <span class="dot" style="background:#FEBC2E"></span>
+          <span class="dot" style="background:#28C840"></span>
+          <span class="ml-3 font-mono text-xs text-[#8A96A8]">marcos@mse: ~</span>
+        </div>
+        <div class="p-6 font-mono text-[13px] sm:text-sm leading-7">
+          <p><span class="text-[#38BDF8]">marcos@mse</span><span class="text-[#8A96A8]">:~$</span> whoami</p>
+          <p id="typed-line" class="text-[#E2E8F0]"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre" class="py-28 border-t" style="border-color:var(--line)">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid lg:grid-cols-5 gap-14">
+      <div class="lg:col-span-2 reveal">
+        <span class="font-mono text-xs tracking-widest text-[color:var(--emerald)] uppercase">// sobre_mim</span>
+        <h2 class="font-display text-3xl sm:text-4xl font-bold mt-4 leading-tight text-[color:var(--navy)]">
+          Arquitetura antes de código.
+        </h2>
+      </div>
+      <div class="lg:col-span-3 reveal" style="transition-delay:.1s">
+        <p class="text-[color:var(--text-dim)] text-base sm:text-lg leading-relaxed mb-10">
+          Profissional focado em entregar soluções de software escaláveis e de alta performance.
+          Especialista na criação de arquiteturas robustas baseadas nos princípios <span class="text-[color:var(--navy)] font-medium">SOLID</span>
+          e <span class="text-[color:var(--navy)] font-medium">Clean Architecture</span>.
+        </p>
+        <div id="stack-container" class="flex flex-wrap gap-3"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJETOS -->
+<section id="projetos" class="py-28 border-t" style="border-color:var(--line)">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="mb-16 reveal">
+      <span class="font-mono text-xs tracking-widest text-[color:var(--sky)] uppercase">// projetos</span>
+      <h2 class="font-display text-3xl sm:text-4xl font-bold mt-4 text-[color:var(--navy)]">Coisas que construí</h2>
+    </div>
+    <div id="projects-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato" class="py-28 border-t" style="border-color:var(--line)">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid lg:grid-cols-5 gap-14">
+      <div class="lg:col-span-2 reveal">
+        <span class="font-mono text-xs tracking-widest text-[color:var(--emerald)] uppercase">// contato</span>
+        <h2 class="font-display text-3xl sm:text-4xl font-bold mt-4 mb-6 text-[color:var(--navy)] leading-tight">
+          Vamos construir algo juntos.
+        </h2>
+        <p class="text-[color:var(--text-dim)] leading-relaxed mb-8">
+          Me chame no WhatsApp ou envie uma mensagem pelo formulário. Respondo o mais rápido possível.
+        </p>
+        <div class="flex items-center gap-4">
+          <a href="https://www.linkedin.com/in/marcossoftwareengineer" target="_blank" rel="noopener" aria-label="LinkedIn" class="social-icon w-11 h-11 rounded-full flex items-center justify-center">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.61 0 4.27 2.38 4.27 5.47v6.27zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z"/>
+            </svg>
+          </a>
+          <a href="https://github.com/marcossoftwareengineering" target="_blank" rel="noopener" aria-label="GitHub" class="social-icon w-11 h-11 rounded-full flex items-center justify-center">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 .5C5.73.5.75 5.48.75 11.75c0 5.02 3.25 9.27 7.76 10.77.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.11-3.16.69-3.83-1.34-3.83-1.34-.52-1.31-1.27-1.66-1.27-1.66-1.04-.71.08-.7.08-.7 1.15.08 1.75 1.18 1.75 1.18 1.02 1.75 2.67 1.24 3.32.95.1-.74.4-1.24.72-1.53-2.52-.29-5.17-1.26-5.17-5.62 0-1.24.44-2.26 1.17-3.05-.12-.29-.51-1.45.11-3.02 0 0 .96-.31 3.15 1.16.91-.25 1.89-.38 2.86-.38.97 0 1.95.13 2.86.38 2.19-1.47 3.15-1.16 3.15-1.16.62 1.57.23 2.73.11 3.02.73.79 1.17 1.81 1.17 3.05 0 4.37-2.66 5.33-5.19 5.61.41.35.77 1.04.77 2.1 0 1.52-.01 2.74-.01 3.11 0 .3.2.66.79.55 4.51-1.5 7.76-5.75 7.76-10.77C23.25 5.48 18.27.5 12 .5z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <form class="lg:col-span-3 reveal" style="transition-delay:.1s" onsubmit="return handleContactSubmit(event)">
+        <div class="grid sm:grid-cols-2 gap-5 mb-5">
+          <div>
+            <label for="name" class="block text-xs font-mono text-[color:var(--text-dim)] mb-2">Nome</label>
+            <input type="text" id="name" name="name" required placeholder="Seu nome completo" class="field w-full rounded-lg px-4 py-3 text-sm">
+          </div>
+          <div>
+            <label for="email" class="block text-xs font-mono text-[color:var(--text-dim)] mb-2">E-mail</label>
+            <input type="email" id="email" name="email" required placeholder="voce@email.com" class="field w-full rounded-lg px-4 py-3 text-sm">
+          </div>
+        </div>
+        <div class="mb-6">
+          <label for="message" class="block text-xs font-mono text-[color:var(--text-dim)] mb-2">Mensagem</label>
+            <textarea id="message" name="message" rows="5" required minlength="10" placeholder="Conte um pouco sobre o seu projeto..." class="field w-full rounded-lg px-4 py-3 text-sm resize-none"></textarea>
+        </div>
+        <button type="submit" class="btn-primary px-8 py-3.5 rounded-full text-sm">Enviar Mensagem</button>
+        <p id="form-feedback" class="mt-4 text-sm font-mono text-[color:var(--emerald)] hidden">Mensagem pronta para envio. Obrigado pelo contato!</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- THEME SWITCHER -->
+<div id="theme-switcher" role="group" aria-label="Selecionar paleta de cores">
+  <div id="theme-dots" class="flex items-center gap-2"></div>
+</div>
+
+<!-- PAINEL FLUTUANTE DE ÁUDIO (Glassmorphism, inferior-esquerdo) -->
+<div id="audio-panel" role="group" aria-label="Controle de áudio ambiente">
+  <button id="audio-toggle-btn" type="button" aria-label="Reproduzir ou pausar áudio ambiente" aria-pressed="false">
+    <svg id="icon-play" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M8 5v14l11-7z"/>
+    </svg>
+    <svg id="icon-pause" class="w-4 h-4 hidden" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M6 5h4v14H6zM14 5h4v14h-4z"/>
+    </svg>
+  </button>
+  <svg class="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5 6 9H2v6h4l5 4V5z"/>
+    <path stroke-linecap="round" stroke-linejoin="round" d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+  </svg>
+  <input id="audio-volume-slider" type="range" min="0" max="100" value="50" step="1" aria-label="Volume do áudio ambiente">
+</div>
+
+<!-- FOOTER -->
+<footer class="border-t py-12" style="border-color:var(--line)">
+  <div class="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+    <p class="font-mono text-xs text-[color:var(--text-dim)]" id="footer-copy"></p>
+    <div class="flex items-center gap-5 text-sm">
+      <a href="https://wa.me/5571987772415" target="_blank" rel="noopener" class="nav-link">WhatsApp</a>
+      <a href="https://github.com/marcossoftwareengineering" target="_blank" rel="noopener" class="nav-link">GitHub</a>
+    </div>
+    <p class="text-xs text-[color:var(--text-dim)]">Desenvolvido por <span class="text-[color:var(--navy)]">Marcos Software Engineer (M.S.E.)</span></p>
+  </div>
+</footer>
+
+<script>
+(function(){
+
+  /* ---------------- ENGINE DE ÁUDIO SÊNIOR DESACOPLADA ---------------- */
+  const themeAudio = document.getElementById('theme-audio');
+  let audioUnlocked = false;
+  let audioTimeoutId = null;
+
+  const btnStart = document.getElementById('btn-start');
+  const splash = document.getElementById('splash');
+  
+  // O clique inicial destrava a engine e toca a primeira vez de forma orgânica
+  btnStart.addEventListener('click', function() {
+    
+    audioUnlocked = true;
+    playThemeSound(); // Play inicial via interação do usuário
+
+    launchSplashEffects();
+    
+    document.getElementById('start-overlay').classList.add('fade-out');
+    splash.classList.add('fade-out');
+    
+    setTimeout(function(){
+      document.getElementById('start-overlay').remove();
+      splash.remove();
+      const splashCanvas = document.getElementById('splash-canvas');
+      if(splashCanvas) splashCanvas.remove();
+      
+      // Inicia as cores (não toca o áudio de novo aqui pra não dar conflito)
+      startMystic(false); 
+      
+    }, 850);
+  });
+
+  // O motor do loop: espera a música acabar e reinicia em exatos 5000ms (5s), sem aleatoriedade.
+  const THEME_LOOP_DELAY_MS = 5000;
+  themeAudio.addEventListener('ended', function() {
+    if (mysticActive && audioUnlocked) {
+      audioTimeoutId = setTimeout(function() {
+        if (mysticActive) {
+          playThemeSound();
+        }
+      }, THEME_LOOP_DELAY_MS);
+    }
+  });
+
+  let currentThemeVolume = 0.5;
+
+  function playThemeSound(){
+    if(!audioUnlocked) return; 
+    themeAudio.currentTime = 0;
+    themeAudio.volume = currentThemeVolume;
+    const playPromise = themeAudio.play();
+    if(playPromise !== undefined){
+      playPromise.catch(function(err){
+        console.warn('[ERRO DE ÁUDIO]', err);
+      });
+    }
+    updateAudioPanelUI();
+  }
+
+  // Função independente para PARAR O ÁUDIO sem afetar o resto
+  function stopAudio() {
+    clearTimeout(audioTimeoutId);
+    themeAudio.pause();
+    themeAudio.currentTime = 0;
+    updateAudioPanelUI();
+  }
+
+  /* ---------------- PAINEL FLUTUANTE DE ÁUDIO (Play/Pause + Volume) ---------------- */
+  const audioToggleBtn = document.getElementById('audio-toggle-btn');
+  const audioVolumeSlider = document.getElementById('audio-volume-slider');
+  const iconPlay = document.getElementById('icon-play');
+  const iconPause = document.getElementById('icon-pause');
+
+  function updateAudioPanelUI(){
+    const isPlaying = !themeAudio.paused && audioUnlocked;
+    if(audioToggleBtn){
+      audioToggleBtn.setAttribute('aria-pressed', String(isPlaying));
+    }
+    if(iconPlay && iconPause){
+      iconPlay.classList.toggle('hidden', isPlaying);
+      iconPause.classList.toggle('hidden', !isPlaying);
+    }
+  }
+
+  if(audioToggleBtn){
+    audioToggleBtn.addEventListener('click', function(){
+      if(themeAudio.paused){
+        audioUnlocked = true;
+        clearTimeout(audioTimeoutId);
+        if(themeAudio.currentTime > 0 && themeAudio.currentTime < (themeAudio.duration || Infinity)){
+          themeAudio.volume = currentThemeVolume;
+          const p = themeAudio.play();
+          if(p !== undefined){ p.catch(function(err){ console.warn('[ERRO DE ÁUDIO]', err); }); }
+          updateAudioPanelUI();
+        } else {
+          playThemeSound();
+        }
+      } else {
+        themeAudio.pause();
+        clearTimeout(audioTimeoutId);
+        updateAudioPanelUI();
+      }
+    });
+  }
+
+  if(audioVolumeSlider){
+    audioVolumeSlider.addEventListener('input', function(){
+      currentThemeVolume = Number(audioVolumeSlider.value) / 100;
+      themeAudio.volume = currentThemeVolume;
+    });
+  }
+
+  themeAudio.addEventListener('play', updateAudioPanelUI);
+  themeAudio.addEventListener('pause', updateAudioPanelUI);
+
+  /* ---------------- FEEDBACK SONORO DE CLIQUE (Botões e Links) ---------------- */
+  const clickAudio = document.getElementById('click-audio');
+
+  function playClickSound(){
+    if(!clickAudio) return;
+    // Clona o nó para permitir sobreposição rápida de cliques sucessivos.
+    const clone = clickAudio.cloneNode(true);
+    clone.volume = clickAudio.volume || 1.0;
+    const p = clone.play();
+    if(p !== undefined){
+      p.catch(function(err){ console.warn('[ERRO DE ÁUDIO DE CLIQUE]', err); });
+    }
+    clone.addEventListener('ended', function(){ clone.remove(); });
+  }
+
+  document.addEventListener('click', function(e){
+    const target = e.target.closest('button, a, .theme-dot, input[type="range"]');
+    if(target){
+      playClickSound();
+    }
+  }, true);
+
+  /* ---------------- SPLASH SCREEN + CONFETTI ---------------- */
+  function launchSplashEffects(){
+    if (typeof confetti === 'undefined') return;
+    try {
+      const canvas = document.getElementById('splash-canvas');
+      const myConfetti = confetti.create(canvas, { resize: true, useWorker: true });
+
+      myConfetti({ particleCount: 120, spread: 90, origin: { y: 0.6 } });
+
+      const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--sky').trim() || '#4F46E5';
+      const accentColor2 = getComputedStyle(document.documentElement).getPropertyValue('--emerald').trim() || '#D97706';
+      const fireworkColors = [accentColor, accentColor2, '#FFFFFF', accentColor];
+      function firework(originX){
+        myConfetti({
+          particleCount: 70, angle: 90, spread: 70, startVelocity: 45,
+          origin: { x: originX, y: 0.5 }, colors: fireworkColors
+        });
+      }
+      setTimeout(function(){ firework(0.2); }, 300);
+      setTimeout(function(){ firework(0.8); }, 700);
+      setTimeout(function(){ firework(0.5); }, 1100);
+    } catch (err) {
+      console.warn('Confetti indisponível:', err);
+    }
+  }
+
+  /* ---------------- THEMES (Fixo + Místico Contínuo) ---------------- */
+  const themeOptions = [
+    { id: "mystic",    type: "mystic", label: "Modo Místico" },
+    { id: "papel",     type: "fixed",  label: "Papel Técnico",  swatch: "#F6F1E6" },
+    { id: "blueprint", type: "fixed",  label: "Blueprint",      swatch: "#0F2942" },
+    { id: "terminal",  type: "fixed",  label: "Terminal",       swatch: "#0B0F17" },
+    { id: "graphite",  type: "fixed",  label: "Graphite",       swatch: "#1C1C1E" }
+  ];
+
+  const MYSTIC_VARS = ['--bg','--bg-soft','--surface','--surface-hi','--line','--text','--text-dim','--navy','--sky','--emerald'];
+
+  const mysticStops = [
+    { '--bg':'#FFFFFF', '--bg-soft':'#FAF7F1', '--surface':'#F6F1E6', '--surface-hi':'#EFE7D3', '--line':'#E4D9C4', '--text':'#20242C', '--text-dim':'#6B7280', '--navy':'#181D27', '--sky':'#4F46E5', '--emerald':'#D97706' },
+    { '--bg':'#0F2942', '--bg-soft':'#0B2135', '--surface':'#153453', '--surface-hi':'#1B3F63', '--line':'#25507A', '--text':'#DCEAF7', '--text-dim':'#9FB8D1', '--navy':'#F3F8FF', '--sky':'#38BDF8', '--emerald':'#FBBF24' },
+    { '--bg':'#1A0B2E', '--bg-soft':'#150824', '--surface':'#241238', '--surface-hi':'#2E1745', '--line':'#3D2159', '--text':'#F3E8FF', '--text-dim':'#B49BD1', '--navy':'#FDF4FF', '--sky':'#C084FC', '--emerald':'#F472B6' },
+    { '--bg':'#0B0F17', '--bg-soft':'#10141D', '--surface':'#141924', '--surface-hi':'#1B212F', '--line':'#252C3B', '--text':'#E5E9F0', '--text-dim':'#8B94A7', '--navy':'#F5F7FA', '--sky':'#10B981', '--emerald':'#22D3EE' },
+    { '--bg':'#0C1F1D', '--bg-soft':'#081613', '--surface':'#123330', '--surface-hi':'#173F3B', '--line':'#1F4F49', '--text':'#E8FFF8', '--text-dim':'#8FC9BE', '--navy':'#FFFDF5', '--sky':'#FBBF24', '--emerald':'#2DD4BF' },
+    { '--bg':'#1C1C1E', '--bg-soft':'#161618', '--surface':'#242426', '--surface-hi':'#2B2B2E', '--line':'#3A3A3D', '--text':'#F2F2F2', '--text-dim':'#A8A8AC', '--navy':'#FFFFFF', '--sky':'#A3E635', '--emerald':'#8B5CF6' }
+  ];
+
+  const SEGMENT_MS = 9000; 
+  const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let mysticActive = false;
+  let mysticRafId = null;
+  let mysticStartTime = 0;
+
+  function hexToRgb(hex){
+    const h = hex.replace('#','');
+    return { r: parseInt(h.substring(0,2),16), g: parseInt(h.substring(2,4),16), b: parseInt(h.substring(4,6),16) };
+  }
+  function rgbToHex(r,g,b){
+    const c = (n) => Math.round(Math.max(0,Math.min(255,n))).toString(16).padStart(2,'0');
+    return '#' + c(r) + c(g) + c(b);
+  }
+  function lerpColor(hexA, hexB, t){
+    const a = hexToRgb(hexA), b = hexToRgb(hexB);
+    return rgbToHex(a.r + (b.r-a.r)*t, a.g + (b.g-a.g)*t, a.b + (b.b-a.b)*t);
+  }
+  function easeInOut(t){
+    return t < 0.5 ? 2*t*t : 1 - Math.pow(-2*t + 2, 2) / 2;
+  }
+
+  function clearMysticVars(){
+    MYSTIC_VARS.forEach(function(v){ document.documentElement.style.removeProperty(v); });
+    document.documentElement.style.removeProperty('--mystic-pulse');
+  }
+
+  function mod(a, b){ return ((a % b) + b) % b; }
+
+  function mysticTick(now){
+    if(!mysticActive) return;
+    const elapsed = Math.max(0, now - mysticStartTime);
+    const n = mysticStops.length;
+    
+    const idx = mod(Math.floor(elapsed / SEGMENT_MS), n);
+    const nextIdx = mod(idx + 1, n);
+    const localT = mod(elapsed, SEGMENT_MS) / SEGMENT_MS;
+    const t = easeInOut(localT);
+
+    const stopA = mysticStops[idx];
+    const stopB = mysticStops[nextIdx];
+    if(stopA && stopB){
+      MYSTIC_VARS.forEach(function(v){
+        document.documentElement.style.setProperty(v, lerpColor(stopA[v], stopB[v], t));
+      });
+    }
+
+    if(!prefersReducedMotion){
+      const pulse = (Math.sin(elapsed / 1400) + 1) / 2;
+      document.documentElement.style.setProperty('--mystic-pulse', pulse.toFixed(3));
+    }
+
+    mysticRafId = requestAnimationFrame(mysticTick);
+  }
+
+  // ATENÇÃO AQUI: Agora ele SÓ DESLIGA AS CORES! 
+  // Ele não mata mais a sua música no meio da inicialização.
+  function stopMystic(){
+    mysticActive = false;
+    if(mysticRafId) cancelAnimationFrame(mysticRafId);
+    document.documentElement.classList.remove('mystic-mode');
+    clearMysticVars();
+    const dot = document.querySelector('.theme-dot-mystic');
+    if(dot) dot.classList.remove('active');
+  }
+
+  function startMystic(shouldPlayAudio = true){
+    stopMystic();
+    mysticActive = true;
+    mysticStartTime = performance.now();
+    document.documentElement.classList.add('mystic-mode');
+    document.querySelectorAll('.theme-dot').forEach(function(d){ d.classList.remove('active'); });
+    const dot = document.querySelector('.theme-dot-mystic');
+    if(dot) dot.classList.add('active');
+    mysticRafId = requestAnimationFrame(mysticTick);
+    
+    if(shouldPlayAudio && audioUnlocked) {
+      stopAudio(); // Se for pra iniciar o áudio, ele zera o anterior e toca.
+      playThemeSound();
+    }
+  }
+
+  function applyTheme(id){
+    stopMystic();
+    stopAudio(); // Se o usuário for pra um tema fixo, a música PARA definitivamente.
+    
+    if(id === "papel"){
+      document.documentElement.removeAttribute("data-theme");
+    } else {
+      document.documentElement.setAttribute("data-theme", id);
+    }
+    document.querySelectorAll(".theme-dot").forEach(function(dot){
+      dot.classList.toggle("active", dot.dataset.themeId === id);
+    });
+  }
+
+  function renderThemeSwitcher(){
+    const container = document.getElementById("theme-dots");
+    
+    // Injetando as Labels Premium
+    let html = '<span class="theme-label" style="margin-right: -4px;">Dinâmico:</span>';
+    
+    const mystic = themeOptions.find(function(t) { return t.type === "mystic"; });
+    if(mystic){
+      html += '<button type="button" class="theme-dot theme-dot-mystic" data-theme-id="mystic" title="Modo Místico (cores fluindo sozinhas)" aria-label="Ativar modo místico"></button>';
+    }
+
+    html += '<span class="theme-label" style="margin-left: 4px; margin-right: -4px;">Estáticos:</span>';
+    
+    themeOptions.filter(function(t) { return t.type === "fixed"; }).forEach(function(t){
+      html += '<button type="button" class="theme-dot" style="background:' + t.swatch + '" data-theme-id="' + t.id + '" title="' + t.label + '" aria-label="Tema ' + t.label + '"></button>';
+    });
+
+    container.innerHTML = html;
+
+    container.querySelectorAll(".theme-dot:not(.theme-dot-mystic)").forEach(function(dot){
+      dot.addEventListener("click", function(){ applyTheme(dot.dataset.themeId); });
+    });
+    const mysticBtn = container.querySelector(".theme-dot-mystic");
+    if(mysticBtn){
+      mysticBtn.addEventListener("click", function(){
+        if(mysticActive){ applyTheme('papel'); }
+        else { startMystic(true); } 
+      });
+    }
+  }
+
+  /* ---------------- MENU HAMBÚRGUER MOBILE ---------------- */
+  function initMobileMenu() {
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    const links = document.querySelectorAll('.mobile-nav-link');
+
+    if(btn && menu) {
+      btn.addEventListener('click', function() {
+        menu.classList.toggle('hidden');
+      });
+
+      // Fecha o menu suavemente após clicar num link
+      links.forEach(function(link) {
+        link.addEventListener('click', function() {
+          menu.classList.add('hidden');
+        });
+      });
+    }
+  }
+
+  /* ---------------- OCULTAÇÃO INTELIGENTE (IDLE TIMEOUT) ---------------- */
+  let idleTimer;
+  let isHoveringUI = false;
+  const uiPanels = [document.getElementById('audio-panel'), document.getElementById('theme-switcher')];
+
+  function resetIdleTimer() {
+    // 1. Mostra os painéis instantaneamente
+    uiPanels.forEach(function(panel) {
+      if(panel) panel.classList.remove('idle-hidden');
+    });
+    
+    clearTimeout(idleTimer);
+
+    // 2. Só inicia a contagem para sumir se o mouse não estiver em cima deles
+    if (!isHoveringUI) {
+      idleTimer = setTimeout(function() {
+        uiPanels.forEach(function(panel) {
+          if(panel) panel.classList.add('idle-hidden');
+        });
+      }, 10000); // 10 segundos exatos
+    }
+  }
+
+  // Detecta interação em todo o site para resetar o timer
+  ['mousemove', 'scroll', 'click', 'touchstart', 'keydown'].forEach(function(evt) {
+    document.addEventListener(evt, resetIdleTimer, { passive: true });
+  });
+
+  // Segura os painéis na tela se o usuário for clicar neles
+  uiPanels.forEach(function(panel) {
+    if(panel) {
+      panel.addEventListener('mouseenter', function() { isHoveringUI = true; resetIdleTimer(); });
+      panel.addEventListener('mouseleave', function() { isHoveringUI = false; resetIdleTimer(); });
+    }
+  });
+
+  /* ---------------- DATA ---------------- */
+  const stack = [
+    "React.js","JavaScript","TypeScript","Node.js","Express",
+    "Python","FastAPI","Kotlin","Java","Flutter","PostgreSQL","SQLite"
+  ];
+
+  const projects = [
+    {
+      title: "GlassFlow Pro",
+      image: "./src/img/img.06.jpeg",
+      link: "#",
+      description: "Sistema de ERP e CRM para o setor vidreiro em produção. Conta com geração de orçamentos personalizados, gestão de tipologias e logos personalizadas inclusas.",
+      tags: ["SaaS", "Flutter", "Node.js", "PostgreSQL"]
+    },
+    {
+      title: "Relatório de Diagnóstico de Infraestrutura",
+      image: "./src/img/Img.02.jpeg",
+      link: "https://marcossoftwareengineering.github.io/Diagn-stico/",
+      description: "Documentação técnica apontando gargalos em firewalls (Cloudflare) com recurso de exportação para PDF.",
+      tags: ["CMS", "WebFTP", "Edge Cache"]
+    },
+    {
+      title: "Assistente Virtual Odontológico",
+      image: "./src/img/img.05.jpeg",
+      link: "https://marcossoftwareengineering.github.io/BotOdont/",
+      description: "Chatbot focado no nicho odontológico para automatizar atendimento primário e qualificação de leads.",
+      tags: ["IA", "Automação de Atendimento"]
+    },
+    {
+      title: "Relatório Estratégico: Integração Claude & Excel",
+      image: "./src/img/Img.01.jpeg",
+      link: "https://marcossoftwareengineering.github.io/Valtercio/",
+      description: "Relatório web interativo que substitui PDFs estáticos para demonstrar o ROI da adoção do Claude for Excel.",
+      tags: ["HTML5", "Tailwind CSS", "Canvas Confetti", "Open Graph"]
+    },
+    {
+      title: "ChatBot Oftalmológico (Demo)",
+      image: "./src/img/img.04.jpeg",
+      link: "#",
+      description: "Demo interativa que guia o cliente ao agendamento automático, gerando leads e orçamentos.",
+      tags: ["ChatBot", "Automação", "UI/UX"]
+    }
+  ];
+
+  function renderStack(){
+    const container = document.getElementById('stack-container');
+    container.innerHTML = stack.map(function(tech){
+      return '<span class="badge font-mono text-xs px-4 py-2 rounded-full">' + tech + '</span>';
+    }).join('');
+  }
+
+  function renderProjects(){
+    const grid = document.getElementById('projects-grid');
+    grid.innerHTML = projects.map(function(p, i){
+      const tagsHtml = p.tags.map(function(t){ return '<span class="tag px-2.5 py-1 rounded-md">' + t + '</span>'; }).join('');
+      const isLive = p.link && p.link !== '#';
+      const linkAttrs = isLive ? 'href="' + p.link + '" target="_blank" rel="noopener"' : 'href="javascript:void(0)" aria-disabled="true"';
+      const ctaLabel = isLive ? 'Ver projeto ↗' : 'Em breve';
+      return (
+        '<article class="card reveal rounded-2xl overflow-hidden flex flex-col" style="transition-delay:' + (i * 0.06) + 's">' +
+          '<div class="card-img-wrap h-48">' +
+            '<img src="' + p.image + '" alt="' + p.title + '" class="w-full h-full object-cover" loading="lazy" onerror="this.style.opacity=0.15">' +
+          '</div>' +
+          '<div class="p-6 flex flex-col flex-1">' +
+            '<h3 class="font-display font-semibold text-lg mb-2 leading-snug text-[color:var(--navy)]">' + p.title + '</h3>' +
+            '<p class="text-sm text-[color:var(--text-dim)] leading-relaxed mb-4 flex-1">' + p.description + '</p>' +
+            '<div class="flex flex-wrap gap-2 mb-5">' + tagsHtml + '</div>' +
+            '<a ' + linkAttrs + ' class="inline-flex items-center gap-1 text-sm font-medium ' + (isLive ? 'text-[color:var(--sky)]' : 'text-[color:var(--text-dim)] cursor-default') + '">' + ctaLabel + '</a>' +
+          '</div>' +
+        '</article>'
+      );
+    }).join('');
+  }
+
+  function initSmoothScroll(){
+    document.querySelectorAll('a[href^="#"]').forEach(function(a){
+      a.addEventListener('click', function(e){
+        const id = a.getAttribute('href');
+        if(id.length > 1){
+          const target = document.querySelector(id);
+          if(target){
+            e.preventDefault();
+            target.scrollIntoView({behavior:'smooth', block:'start'});
+          }
+        }
+      });
+    });
+  }
+
+  function initReveal(){
+    const items = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    items.forEach(function(item){ observer.observe(item); });
+  }
+
+  function initTyping(){
+    const el = document.getElementById('typed-line');
+    const text = "Marcos Vinicius — Full-Stack Engineer, Clean Architecture & SOLID.";
+    let i = 0;
+    function tick(){
+      if(i <= text.length){
+        el.innerHTML = text.slice(0, i) + '<span class="cursor"></span>';
+        i++;
+        setTimeout(tick, 28);
+      }
+    }
+    tick();
+  }
+
+  window.handleContactSubmit = function(e){
+    e.preventDefault();
+    const feedback = document.getElementById('form-feedback');
+    feedback.classList.remove('hidden');
+    e.target.reset();
+    return false;
+  };
+
+  function renderFooter(){
+    document.getElementById('footer-copy').textContent =
+      '© ' + new Date().getFullYear() + ' Marcos Software Engineer. Todos os direitos reservados.';
+  }
+
+  /* ---------------- BOOT ---------------- */
+  renderThemeSwitcher();
+  renderStack();
+  renderProjects();
+  renderFooter();
+  initSmoothScroll();
+  initReveal();
+  initTyping();
+  initMobileMenu();
+  
+  if(clickAudio){ clickAudio.volume = 1.0; }
+  updateAudioPanelUI();
+  resetIdleTimer(); // Aciona o gatilho inicial de 10s
+
+})();
+</script>
+</body>
+</html>
